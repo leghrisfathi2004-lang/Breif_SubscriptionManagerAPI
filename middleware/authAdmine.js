@@ -1,4 +1,5 @@
-const respond = require('./respond');
+const { respond } = require('./respond.js');
+
 const authAdmine = (req, res, next) => {
     //for admin
     const {email, password, username, useremail} = req.body;
@@ -8,4 +9,5 @@ const authAdmine = (req, res, next) => {
     }
     return respond(res, 403);
 }
+
 module.exports = {authAdmine}

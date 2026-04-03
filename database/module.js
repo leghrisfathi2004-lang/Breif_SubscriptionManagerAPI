@@ -12,8 +12,7 @@ const subShema = new mongoose.Schema({
     //id genere auto par mongodb
     name: { type: String, required: true },
     price: { type: Number, required: true },
-    //true: mensuel   false: annuel
-    billingCycle: { type: Boolean, required: true },
+    billingCycle: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     userEmail: {
         type: String,

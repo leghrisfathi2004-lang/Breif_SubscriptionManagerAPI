@@ -6,17 +6,20 @@ const {authAdmine} = require('../middleware/authAdmine.js');
 const {auth} = require('../middleware/auth.js');
 const {register, login, getUser, deleteUser, getAllUsers} = require('../controllers/users.controller.js');
 const {addSub, deleteSub, getAllSubs, getUserSubs} = require('../controllers/subs.controller.js');
+const {validateSub, validateUser} = require("../middleware/validate.js");
 console.log('routes');
 
-router.post("/users/new", register);
-router.post("/users/login", login);
+//manage user
+router.post("/users/new", validateUser, register);
+router.post("/users/login", validateUser, login);
 router.get("/users/profile", auth, getUser);
 
-router.post("/users/subs", auth, addSub);
+//manage subs
+router.post("/users/subs", validateSub, auth, addSub);
 router.get("/users/subs", auth, getUserSubs);
-//need to work en patch - edit sub
 router.delete("/users/subs/:id", auth, deleteSub);
 
+//admin routes
 router.get("/admin/users", authAdmine, getAllUsers);
 router.delete("/admin/users", authAdmine, deleteUser);
 router.get("/admin/subs", authAdmine, getAllSubs);

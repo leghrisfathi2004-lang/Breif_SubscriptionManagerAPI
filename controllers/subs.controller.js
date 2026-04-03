@@ -21,29 +21,36 @@ const addSub = async (req, res) => {
 }
 
 const deleteSub = async (req, res) => {
-    const id = Number(req.params.id); 
-    if(!id)
-        return respond(res, 404);
     try{
+        const id = req.params.id; 
+        if(!id)
+            return respond(res, 404);
+
         let resultat = await sub.deleteOne({ _id: id});
+        if(resultat.deleteOne === 0)
+            return respond(res, 404, "id not found!");
+        respond(res, 204);
     }catch(err){
         return respond(res, 500);
     }
-    respond(res, 204);
 }
 
 const getAllSubs = async (req, res) => {
-    const subs = await sub.find();
-    if(!subs)
-        return respond(res, 404);
-    respond(res, 200, subs);
+    try{
+        const subs = await sub.find({}).lean();
+        if(!subs)
+            return respond(res, 404);
+        respond(res, 200, subs);
+    }catch(e){
+        respond(res, 500, e.message);
+    }
 }
 
 const getUserSubs = async (req, res) => {
     try {
         if(!req.user.email)
             return respond(res, 404);
-        const subs = await sub.find({ userEmail: req.user.email }).populate('userEmail', "-password");
+        const subs = await sub.find({ userEmail: req.user.email }).lean();
         if(!subs)
             return respond(res, 204);
         respond(res, 200, subs);
